@@ -19,7 +19,7 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        $capacity = fake()->numberBetween(1, 100);
+        $capacity = fake()->numberBetween(1, 5);
         
         return [
             'uuid' => Str::uuid(),

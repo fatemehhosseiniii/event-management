@@ -18,10 +18,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/events', EventController::class);
     //reserv routes
     Route::apiResource('/reservs', ReservController::class)->only(['store', 'index']);
-    Route::prefix('reservs')->group(function () {
-        //confirm reservation
-        Route::put('/{reserv}/confirm', [ReservController::class, 'confirm']);
-    });
     //Admin Routes
     include __DIR__ . '/panel-api.php';
 });

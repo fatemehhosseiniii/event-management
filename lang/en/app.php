@@ -17,6 +17,7 @@ return [
         'already_reserved'=>'You have already reserved this event',
         'event_full'=>'This event is full',
         'not_found'=>'Reservation not found',
+        'event_not_found'=>'Event not found',
     ]
 
 ];
