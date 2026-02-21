@@ -23,6 +23,7 @@ class EventResource extends JsonResource
         return [
 
             'id'=>$this->when($isPanel, $event->id),
+            'code'=>$this->when(!$isPanel, $event->uuid),
 
             'title'=>$event->title,
             'description'=>$this->when($isShow, $event->description),
@@ -39,8 +40,9 @@ class EventResource extends JsonResource
                 $event->relationLoaded('creator') && $isPanel,
                 fn () => $event->creator?->name ?? $event->creator?->email ?? '-'
             ),
+            'active_reserv'=>$this->when($isPanel, fn()=>(bool)$event->ActiveReserv && $event->free_capacity >0),
         
-            'created_at'=>$event->created_at,
+            'created_at'=>$event->start_date ?? $event->created_at,
         ];
     }
 }
