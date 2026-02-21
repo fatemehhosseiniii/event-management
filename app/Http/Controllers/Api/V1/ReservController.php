@@ -14,9 +14,7 @@ use Illuminate\Http\JsonResponse;
 
 class ReservController extends Controller
 {
-    /**
-     * Display a listing of the user's reservations.
-     */
+
     public function index(): JsonResponse
     {
         $reservs = Reserv::query()
@@ -28,9 +26,7 @@ class ReservController extends Controller
         return Response::success(new ReservCollection($reservs));
     }
 
-    /**
-     * Store a newly created reservation.
-     */
+
     public function store(ReservRequest $request)
     {
         $event = Event::where('uuid', $request->validated('event_code'))->isActive()->first();
