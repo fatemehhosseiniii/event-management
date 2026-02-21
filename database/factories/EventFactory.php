@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
@@ -20,6 +22,7 @@ class EventFactory extends Factory
         $capacity = fake()->numberBetween(1, 100);
         
         return [
+            'uuid' => Str::uuid(),
             'title' => fake()->sentence(3),
             'description' => fake()->paragraph(3),
             'capacity' => $capacity,

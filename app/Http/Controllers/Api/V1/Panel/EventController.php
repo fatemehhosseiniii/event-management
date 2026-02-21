@@ -38,6 +38,7 @@ class EventController extends Controller
         //create event
         $event=Event::create($request->validated());
 
+        $event->refresh();
         $event->load('creator');
         //return Result
         return Response::success((new EventResource($event))->additional(['is_panel' => true]));
@@ -48,6 +49,7 @@ class EventController extends Controller
         //update event
         $event->update($request->validated());
 
+        $event->refresh();
         $event->load('creator');
         //return Result
         return Response::success((new EventResource($event))->additional(['is_panel' => true,'is_show' => true]));
