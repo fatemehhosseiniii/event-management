@@ -23,7 +23,7 @@ class EventRequest extends FormRequest
     {
         return [
             'title'=>['required','string','max:80','unique:events,title,'.(request()->route('event')?->id ?? null)],
-            'description'=>['nullable','string','max:250','unique:events,description,except,id'],
+            'description'=>['nullable','string','max:250'],
             'capacity'=>['required','integer','min:1'],
             'start_date'=>['nullable','date_format:Y-m-d H:i'],
             'end_date'=>['nullable','date_format:Y-m-d H:i','after:start_date'],

@@ -5,6 +5,7 @@ namespace App\Services\Reservation;
 use App\Enums\ReservConfirmed;
 use App\Models\Event;
 use App\Models\Reserv;
+use App\Repositories\EventRepository;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -39,7 +40,7 @@ class ReservService
                 $reserv = self::loadReservationRelations($reserv);
             
                 
-                self::clearEventCache($eventUuid);
+                (new EventRepository())->clearEventCache();
                 
                 return $reserv;
             });
@@ -79,7 +80,38 @@ class ReservService
 
                 $reserv = self::loadReservationRelations($reserv);
                 
-                self::clearEventCache($reserv->event->uuid);
+                (new EventRepository())->clearEventCache();
+
+                return $reserv;
+            });
+        } finally {
+            $lock->release();
+        }
+    }
+
+     /**
+     * Remove reservation
+     *
+     * @param Reserv $reserv
+     * @return Reserv
+     * @throws \Exception
+     */
+    public static function removeReservation(Reserv $reserv): Reserv
+    {
+
+        $event=$reserv->event;
+        $lockKey = "reservation:event:{$event->uuid}";
+        $lock = Cache::lock($lockKey, 10);
+    
+
+        try {
+            $lock->block(5);
+
+            return DB::transaction(function () use ($reserv, $event) {
+                $reserv->delete();
+                
+                self::increaseEventCapacity($event);
+                (new EventRepository())->clearEventCache();
 
                 return $reserv;
             });
@@ -153,20 +185,6 @@ class ReservService
         return $reserv;
     }
 
-    /**
-     * Clear event cache after reservation changes
-     *
-     * @param string $eventUuid
-     * @return void
-     */
-    private static function clearEventCache(string $eventUuid): void
-    {
-        $page = 1;
-        while (Cache::has("events:active:list:page:{$page}")) {
-            Cache::forget("events:active:list:page:{$page}");
-            $page++;
-        }
-        Cache::forget("event:{$eventUuid}");
-    }
+   
 }
 
