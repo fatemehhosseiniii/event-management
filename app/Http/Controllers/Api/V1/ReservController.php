@@ -63,6 +63,7 @@ class ReservController extends Controller
         $reserv->update([
             'is_confirmed' => ReservConfirmed::RejectedPending,
         ]);
+        $reserv->load(['event']);
 
         return Response::success(new ReservResource($reserv));
     }

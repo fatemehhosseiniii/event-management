@@ -13,7 +13,7 @@ return [
     ],
     'reservs'=>[
         'event'=>'Event',
-
+        'is_confirmed'=>'Is Confirmed',
         'confirmed'=>[
             'pending'=>'Pending',
             'confirmed'=>'Confirmed',
@@ -25,6 +25,7 @@ return [
         'event_full'=>'This event is full',
         'not_found'=>'Reservation not found',
         'event_not_found'=>'Event not found',
+        'invalid_confirm_type'=>'Invalid confirm type',
     ]
 
 ];
