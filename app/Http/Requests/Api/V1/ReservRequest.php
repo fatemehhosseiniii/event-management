@@ -22,11 +22,9 @@ class ReservRequest extends FormRequest
      */
     public function rules(): array
     {
-        $reservId = $this->route('reserv')?->id ?? null;
-        $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
         
         return [
-            'event_code' => [$isUpdate ? 'sometimes' : 'required','uuid','exists:events,uuid'],
+            'event_code' => ['required','uuid','exists:events,uuid'],
         ];
     }
 

@@ -17,7 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //active event List
     Route::get('/events', EventController::class);
     //reserv routes
-    Route::apiResource('/reservs', ReservController::class)->only(['store', 'index']);
+    Route::apiResource('/reservs', ReservController::class)->only(['store','update', 'index']);
     //Admin Routes
     include __DIR__ . '/panel-api.php';
 });

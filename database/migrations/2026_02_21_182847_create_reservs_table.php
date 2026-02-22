@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ReservConfirmed;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->foreignId('event_id')->constrained('events')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->restrictOnDelete();
 
-            $table->boolean('is_confirmed')->default(false);
+            $table->tinyInteger('is_confirmed')->default(ReservConfirmed::Confirmed);
             $table->timestamps();
         });
     }

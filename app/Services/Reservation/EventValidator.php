@@ -2,6 +2,7 @@
 
 namespace App\Services\Reservation;
 
+use App\Enums\ReservConfirmed;
 use App\Models\Event;
 use App\Models\Reserv;
 
@@ -33,7 +34,11 @@ class EventValidator
     {
         $existingReserv = Reserv::where('event_id', $eventId)
             ->where('user_id', $userId)
-            ->first();
+            ->where(function($q) {
+                $q->where('is_confirmed',ReservConfirmed::Confirmed)
+                ->orWhere('is_confirmed', ReservConfirmed::RejectedPending)
+                ->orWhere('is_confirmed', ReservConfirmed::Pending);
+            })->first();
 
         if ($existingReserv) {
             throw new \Exception(__('app.reservs.already_reserved'));

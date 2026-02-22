@@ -27,7 +27,8 @@ class ReservResource extends JsonResource
                 ]:['is_deleted' => true]
             ),
          
-            'is_confirmed' => $reserv->is_confirmed,
+            'confirmed' => $reserv->is_confirmed->label(),
+            'confirmed_key' => $reserv->is_confirmed->key(),
             'created_at' => $reserv->created_at,
         ];
     }
