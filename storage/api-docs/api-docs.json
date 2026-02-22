@@ -958,7 +958,7 @@
                     "code": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                        "example": "550e8400-0000-0000-0000-000000000000"
                     },
                     "title": {
                         "type": "string",
@@ -980,7 +980,7 @@
                     "code": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                        "example": "550e8400-0000-0000-0000-000000000000"
                     },
                     "title": {
                         "type": "string",
@@ -1161,15 +1161,15 @@
                                     "code": {
                                         "type": "string",
                                         "format": "uuid",
-                                        "example": "edc30806-4a13-4cb4-8429-719809c45f11"
+                                        "example": "550e8400-0000-0000-0000-000000000000"
                                     },
                                     "title": {
                                         "type": "string",
-                                        "example": "Enim autem possimus distinctio."
+                                        "example": "Event Title"
                                     },
                                     "description": {
                                         "type": "string",
-                                        "example": "Et consectetur tenetur accusantium impedit harum. Alias impedit eum voluptatem quae officiis et autem. Labore magni repudiandae sed fugit quaerat dolor et."
+                                        "example": "Event description"
                                     },
                                     "free_capacity": {
                                         "type": "integer",
@@ -1207,7 +1207,7 @@
                                         },
                                         "title": {
                                             "type": "string",
-                                            "example": "Et autem et rem."
+                                            "example": "Event Title"
                                         },
                                         "capacity": {
                                             "type": "integer",
@@ -1217,18 +1217,17 @@
                                             "type": "integer",
                                             "example": 0
                                         },
-                                        "creator": {
-                                            "type": "string",
-                                            "example": "Admin User"
-                                        },
                                         "active_reserv": {
                                             "type": "boolean",
                                             "example": false
                                         },
+                                        "creator": {
+                                            "type": "string",
+                                            "example": "Admin Name"
+                                        },
                                         "created_at": {
                                             "type": "string",
-                                            "format": "date-time",
-                                            "example": "2026-02-20T14:57:33.000000Z"
+                                            "format": "date-time"
                                         }
                                     },
                                     "type": "object"
@@ -1307,8 +1306,7 @@
                                     },
                                     "created_at": {
                                         "type": "string",
-                                        "format": "date-time",
-                                        "example": "2024-01-01T10:00:00.000000Z"
+                                        "format": "date-time"
                                     }
                                 },
                                 "type": "object"
@@ -1329,7 +1327,7 @@
                         "type": "string",
                         "format": "email",
                         "maxLength": 250,
-                        "example": "user@example.com"
+                        "example": "admin@admin.com"
                     }
                 },
                 "type": "object"
@@ -1345,7 +1343,7 @@
                         "type": "string",
                         "format": "email",
                         "maxLength": 250,
-                        "example": "user@example.com"
+                        "example": "admin@admin.com"
                     },
                     "code": {
                         "description": "6-digit OTP code",
@@ -1365,7 +1363,7 @@
                         "description": "Event UUID",
                         "type": "string",
                         "format": "uuid",
-                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                        "example": "550e8400-0000-0000-0000-000000000000"
                     }
                 },
                 "type": "object"
@@ -1417,11 +1415,11 @@
                 ],
                 "properties": {
                     "is_confirmed": {
-                        "description": "Reservation status: confirmed or rejected_confirmed",
+                        "description": "Reservation status: confirmed=1 or rejected_confirmed=3",
                         "type": "string",
                         "enum": [
-                            "confirmed",
-                            "rejected_confirmed"
+                            "1",
+                            "3"
                         ],
                         "example": "confirmed"
                     }
@@ -1439,7 +1437,7 @@
                             "email": {
                                 "type": "string",
                                 "format": "email",
-                                "example": "user@example.com"
+                                "example": "admin@admin.com"
                             }
                         },
                         "type": "object"
@@ -1457,7 +1455,7 @@
                         "properties": {
                             "access_token": {
                                 "type": "string",
-                                "example": "1|abcdefghijklmnopqrstuvwxyz1234567890"
+                                "example": "1|1234567890"
                             }
                         },
                         "type": "object"
@@ -1470,7 +1468,7 @@
                     "code": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                        "example": "550e8400-0000-0000-0000-000000000000"
                     },
                     "title": {
                         "type": "string",
@@ -1492,7 +1490,7 @@
                     "code": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                        "example": "550e8400-0000-0000-0000-000000000000"
                     },
                     "title": {
                         "type": "string",
@@ -1518,7 +1516,7 @@
                     "email": {
                         "type": "string",
                         "format": "email",
-                        "example": "user@example.com"
+                        "example": "admin@admin.com"
                     }
                 },
                 "type": "object"
@@ -1528,14 +1526,14 @@
                     "code": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                        "example": "550e8400-0000-0000-0000-000000000000"
                     },
                     "event": {
                         "properties": {
                             "code": {
                                 "type": "string",
                                 "format": "uuid",
-                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                                "example": "550e8400-0000-0000-0000-000000000000"
                             },
                             "title": {
                                 "type": "string",
@@ -1572,7 +1570,7 @@
                     "code": {
                         "type": "string",
                         "format": "uuid",
-                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                        "example": "550e8400-0000-0000-0000-000000000000"
                     },
                     "event": {
                         "properties": {
@@ -1583,7 +1581,7 @@
                             "code": {
                                 "type": "string",
                                 "format": "uuid",
-                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                                "example": "550e8400-0000-0000-0000-000000000000"
                             },
                             "title": {
                                 "type": "string",
@@ -1609,7 +1607,7 @@
                             "email": {
                                 "type": "string",
                                 "format": "email",
-                                "example": "user@example.com"
+                                "example": "admin@admin.com"
                             }
                         },
                         "type": "object"
@@ -1644,14 +1642,14 @@
                                         "code": {
                                             "type": "string",
                                             "format": "uuid",
-                                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                                            "example": "550e8400-0000-0000-0000-000000000000"
                                         },
                                         "event": {
                                             "properties": {
                                                 "code": {
                                                     "type": "string",
                                                     "format": "uuid",
-                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                    "example": "550e8400-0000-0000-0000-000000000000"
                                                 },
                                                 "title": {
                                                     "type": "string",
@@ -1715,18 +1713,18 @@
                                     "code": {
                                         "type": "string",
                                         "format": "uuid",
-                                        "example": "d8dcceab-bade-48fd-91cd-eff21992f531"
+                                        "example": "550e8400-0000-0000-0000-000000000000"
                                     },
                                     "event": {
                                         "properties": {
                                             "code": {
                                                 "type": "string",
                                                 "format": "uuid",
-                                                "example": "97311cdd-8337-4cfb-b4a0-e033164cf022"
+                                                "example": "550e8400-0000-0000-0000-000000000000"
                                             },
                                             "title": {
                                                 "type": "string",
-                                                "example": "Iure rerum est."
+                                                "example": "Event Title"
                                             },
                                             "active_reserv": {
                                                 "type": "boolean",
@@ -1745,8 +1743,7 @@
                                     },
                                     "created_at": {
                                         "type": "string",
-                                        "format": "date-time",
-                                        "example": "2026-02-22T19:14:11.000000Z"
+                                        "format": "date-time"
                                     }
                                 },
                                 "type": "object"
@@ -1776,7 +1773,7 @@
                                         "code": {
                                             "type": "string",
                                             "format": "uuid",
-                                            "example": "d8dcceab-bade-48fd-91cd-eff21992f531"
+                                            "example": "550e8400-0000-0000-0000-000000000000"
                                         },
                                         "event": {
                                             "properties": {
@@ -1788,12 +1785,12 @@
                                                 "code": {
                                                     "type": "string",
                                                     "format": "uuid",
-                                                    "example": "97311cdd-8337-4cfb-b4a0-e033164cf022",
+                                                    "example": "550e8400-0000-0000-0000-000000000000",
                                                     "nullable": true
                                                 },
                                                 "title": {
                                                     "type": "string",
-                                                    "example": "Iure rerum est.",
+                                                    "example": "Event Title",
                                                     "nullable": true
                                                 },
                                                 "active_reserv": {
@@ -1817,7 +1814,7 @@
                                                 },
                                                 "name": {
                                                     "type": "string",
-                                                    "example": "Admin User"
+                                                    "example": "Admin Name"
                                                 },
                                                 "email": {
                                                     "type": "string",
@@ -1837,8 +1834,7 @@
                                         },
                                         "created_at": {
                                             "type": "string",
-                                            "format": "date-time",
-                                            "example": "2026-02-22T19:14:11.000000Z"
+                                            "format": "date-time"
                                         }
                                     },
                                     "type": "object"
@@ -1896,7 +1892,7 @@
                             "code": {
                                 "type": "string",
                                 "format": "uuid",
-                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                                "example": "550e8400-0000-0000-0000-000000000000"
                             },
                             "event": {
                                 "properties": {
@@ -1907,7 +1903,7 @@
                                     "code": {
                                         "type": "string",
                                         "format": "uuid",
-                                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                                        "example": "550e8400-0000-0000-0000-000000000000"
                                     },
                                     "title": {
                                         "type": "string",
@@ -1933,7 +1929,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "user@example.com"
+                                        "example": "admin@admin.com"
                                     }
                                 },
                                 "type": "object"
