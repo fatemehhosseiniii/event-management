@@ -10,9 +10,15 @@ return [
         'free_capacity'=>'Free Capacity',
         'start_date'=>'Start Date',
         'end_date'=>'End Date',
+
+        'not_found'=>'Event not found',
     ],
     'reservs'=>[
         'event'=>'Event',
+
+        'title'=>'Title',
+        'is_available'=>'Is Available',
+
         'is_confirmed'=>'Is Confirmed',
         'confirmed'=>[
             'pending'=>'Pending',

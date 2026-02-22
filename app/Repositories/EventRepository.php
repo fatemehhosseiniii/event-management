@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\Event;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+class EventRepository
+{
+    /**
+     * Get active paginated events
+     *
+     * @param int $page
+     * @return LengthAwarePaginator
+     */
+    public function getActivePaginatedEvents(int $page): LengthAwarePaginator
+    {
+        $cacheKey = 'events:active:list';
+        return Cache::remember(
+            "{$cacheKey}:page:{$page}",
+            300, // 5 minutes cache
+            function () use ($page) {
+                return Event::query()
+                    ->isActive()
+                    ->orderByDesc('created_at')->paginate(config('app.pagination'), ['*'], 'page', $page);
+            }
+        );
+    }
+
+    /**
+     * Find event by uuid
+     *
+     * @param string $uuid
+     * @return Event
+     * @throws \Exception
+     */
+    public function findEventByUuid(string $uuid): Event
+    {
+        $event= Event::where('uuid', $uuid)->isActive()->first();
+        if(!$event) {
+            throw new NotFoundHttpException(__('app.events.not_found'));
+        }
+        return $event;
+    }
+
+}

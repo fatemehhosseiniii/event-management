@@ -15,7 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     //active event List
-    Route::get('/events', EventController::class);
+    Route::apiResource('/events', EventController::class)->only(['index','show']);
     //reserv routes
     Route::apiResource('/reservs', ReservController::class)->only(['store','update', 'index']);
     //Admin Routes

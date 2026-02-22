@@ -21,7 +21,7 @@ class ReservController extends Controller
         $reservs = Reserv::query()
         ->with(['event'])
             ->where('user_id', auth()->id())
-            ->orderByDesc('created_at')
+            ->orderByDesc('updated_at')
             ->paginate(config('app.pagination'));
 
         return Response::success(new ReservCollection($reservs));
