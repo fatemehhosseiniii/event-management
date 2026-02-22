@@ -5,13 +5,15 @@ namespace App\Services\Reservation;
 use App\Enums\ReservConfirmed;
 use App\Models\Event;
 use App\Models\Reserv;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReservService
 {
     /**
      * Create a new reservation for the authenticated user
-     * Handles concurrency using database transactions and locks
+     * Handles concurrency using Redis Lock and database transactions
      *
      * @param string $eventUuid
      * @param int $userId
@@ -20,36 +22,70 @@ class ReservService
      */
     public static function createReservation(string $eventUuid, int $userId): Reserv
     {
-        return DB::transaction(function () use ($eventUuid, $userId) {
-            $event = self::findAndLockEvent($eventUuid);
+        $lockKey = "reservation:event:{$eventUuid}";
+        $lock = Cache::lock($lockKey, 10);
+
+        try {
+            $lock->block(5);
+
+            return DB::transaction(function () use ($eventUuid, $userId) {
+                $event = self::findAndLockEvent($eventUuid);
+                
+                EventValidator::validateReservation($event, $userId);
+                
+                $reserv = self::createReservationRecord($event->id, $userId);
+                self::decreaseEventCapacity($event);
+                
+                $reserv = self::loadReservationRelations($reserv);
             
-            EventValidator::validateReservation($event, $userId);
-            
-            $reserv = self::createReservationRecord($event->id, $userId);
-            self::decreaseEventCapacity($event);
-            
-            return self::loadReservationRelations($reserv);
-        });
+                
+                self::clearEventCache($eventUuid);
+                
+                return $reserv;
+            });
+        } catch (\Exception $e) {
+            Log::error('Reservation creation failed', [
+                'event_uuid' => $eventUuid,
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+            ]);
+            throw $e;
+        } finally {
+            $lock->release();
+        }
     }
 
     /**
      * Reject reservation
      *
      * @param Reserv $reserv
-     * @return void
+     * @return Reserv
      * @throws \Exception
      */
     public static function rejectReservation(Reserv $reserv): Reserv
     {
-        return DB::transaction(function () use ($reserv) {
-            $reserv->update([
-                'is_confirmed' => ReservConfirmed::RejectedConfirmed,
-            ]);
+        $lockKey = "reservation:event:{$reserv->event->uuid}";
+        $lock = Cache::lock($lockKey, 10);
 
-            self::increaseEventCapacity($reserv->event);
+        try {
+            $lock->block(5);
 
-            return self::loadReservationRelations($reserv);
-        });
+            return DB::transaction(function () use ($reserv) {
+                $reserv->update([
+                    'is_confirmed' => ReservConfirmed::RejectedConfirmed,
+                ]);
+
+                self::increaseEventCapacity($reserv->event);
+
+                $reserv = self::loadReservationRelations($reserv);
+                
+                self::clearEventCache($reserv->event->uuid);
+
+                return $reserv;
+            });
+        } finally {
+            $lock->release();
+        }
     }
 
     /**
@@ -115,6 +151,22 @@ class ReservService
     {
         $reserv->load(['event','user']);
         return $reserv;
+    }
+
+    /**
+     * Clear event cache after reservation changes
+     *
+     * @param string $eventUuid
+     * @return void
+     */
+    private static function clearEventCache(string $eventUuid): void
+    {
+        $page = 1;
+        while (Cache::has("events:active:list:page:{$page}")) {
+            Cache::forget("events:active:list:page:{$page}");
+            $page++;
+        }
+        Cache::forget("event:{$eventUuid}");
     }
 }
 
