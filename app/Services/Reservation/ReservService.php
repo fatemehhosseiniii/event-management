@@ -2,6 +2,7 @@
 
 namespace App\Services\Reservation;
 
+use App\Enums\ReservConfirmed;
 use App\Models\Event;
 use App\Models\Reserv;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +28,26 @@ class ReservService
             $reserv = self::createReservationRecord($event->id, $userId);
             self::decreaseEventCapacity($event);
             
+            return self::loadReservationRelations($reserv);
+        });
+    }
+
+    /**
+     * Reject reservation
+     *
+     * @param Reserv $reserv
+     * @return void
+     * @throws \Exception
+     */
+    public static function rejectReservation(Reserv $reserv): Reserv
+    {
+        return DB::transaction(function () use ($reserv) {
+            $reserv->update([
+                'is_confirmed' => ReservConfirmed::RejectedConfirmed,
+            ]);
+
+            self::increaseEventCapacity($reserv->event);
+
             return self::loadReservationRelations($reserv);
         });
     }
@@ -72,6 +93,18 @@ class ReservService
         $event->decrement('free_capacity');
     }
 
+
+    /**
+     * Increase event free capacity
+     *
+     * @param Event $event
+     * @return void
+     */
+    private static function increaseEventCapacity(Event $event): void
+    {
+        $event->increment('free_capacity');
+    }
+
     /**
      * Load reservation relationships
      *
@@ -80,7 +113,7 @@ class ReservService
      */
     private static function loadReservationRelations(Reserv $reserv): Reserv
     {
-        $reserv->load(['event', 'user']);
+        $reserv->load(['event','user']);
         return $reserv;
     }
 }

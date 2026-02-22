@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api\V1;
+namespace App\Http\Requests\Api\V1\Panel;
 
+use App\Enums\ReservConfirmed;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class ReservRequest extends FormRequest
 {
@@ -22,17 +24,15 @@ class ReservRequest extends FormRequest
      */
     public function rules(): array
     {
-        
         return [
-            'event_code' => ['required','uuid','exists:events,uuid'],
+            'is_confirmed'=>['required',Rule::in([ReservConfirmed::Confirmed->value,ReservConfirmed::RejectedConfirmed->value])]
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'event_code' => __('app.reservs.event'),
+            'is_confirmed'=>__('app.reservs.is_confirmed'),
         ];
     }
 }
-

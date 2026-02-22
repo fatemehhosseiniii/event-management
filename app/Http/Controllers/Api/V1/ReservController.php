@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ReservConfirmed;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\ReservRequest;
 use App\Http\Resources\Data\ReservCollection;
@@ -46,5 +47,25 @@ class ReservController extends Controller
         }
     }
 
+
+    public function update($reserv)
+    {
+        //find
+        $reserv = Reserv::where('user_id', auth()->id())
+        ->where('is_confirmed', ReservConfirmed::Confirmed)
+        ->where('created_at', '>=', now()->subHours(6))
+        ->where('uuid', $reserv)->first();
+        if(!$reserv) {
+            return Response::error(__('app.reservs.not_found'), HttpResponse::HTTP_NOT_FOUND);
+        }
+
+        //save confirmed cancelled
+        $reserv->update([
+            'is_confirmed' => ReservConfirmed::RejectedPending,
+        ]);
+        $reserv->load(['event']);
+
+        return Response::success(new ReservResource($reserv));
+    }
 
 }
