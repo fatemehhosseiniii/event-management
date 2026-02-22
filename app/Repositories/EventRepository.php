@@ -24,7 +24,9 @@ class EventRepository
             function () use ($page) {
                 return Event::query()
                     ->isActive()
-                    ->orderByDesc('created_at')->paginate(config('app.pagination'), ['*'], 'page', $page);
+                    ->orderByDesc('created_at')
+                    ->orderBy('free_capacity')
+                    ->paginate(config('app.pagination'), ['*'], 'page', $page);
             }
         );
     }
@@ -43,6 +45,22 @@ class EventRepository
             throw new NotFoundHttpException(__('app.events.not_found'));
         }
         return $event;
+    }
+
+    
+     /**
+     * Clear event cache after reservation changes
+     *
+     * @param string $eventUuid
+     * @return void
+     */
+    public function clearEventCache(): void
+    {
+        $page = 1;
+        while (Cache::has("events:active:list:page:{$page}")) {
+            Cache::forget("events:active:list:page:{$page}");
+            $page++;
+        }
     }
 
 }

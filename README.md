@@ -26,6 +26,7 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
+php artisan l5-swagger:generate
 ```
 
 ## API Endpoints
